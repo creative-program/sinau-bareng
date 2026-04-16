@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sinau Bareng - Kuis Online</title>
+    <title>Sinau Bareng - Kuis IFP & Ruang Murid</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Plus Jakarta Sans -->
@@ -41,21 +41,19 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
         
-        // Helper to get environment variables safely
         const getEnv = (key, fallback) => {
             try {
                 if (key === 'config') return typeof __firebase_config !== 'undefined' ? (typeof __firebase_config === 'string' ? JSON.parse(__firebase_config) : __firebase_config) : null;
-                if (key === 'appId') return typeof __app_id !== 'undefined' ? __app_id : 'sinau-bareng-pid';
+                if (key === 'appId') return typeof __app_id !== 'undefined' ? __app_id : 'sinau-bareng-ifp';
                 if (key === 'token') return typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
             } catch (e) { return null; }
             return fallback;
         };
 
         const config = getEnv('config', null);
-        const appId = getEnv('appId', 'default-app');
+        const appId = getEnv('appId', 'sinau-bareng-ifp');
         const authToken = getEnv('token', null);
 
-        // SVG Icons managed by React to prevent "removeChild" errors
         const Icon = ({ name, size = 20, className = "" }) => {
             const icons = {
                 user: <><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></>,
@@ -84,17 +82,118 @@
             </svg>
         );
 
+        // Pertanyaan dengan sebaran kunci jawaban yang proporsional (A, B, C, D)
         const questions = [
-            { question: "Sistem operasi apakah yang umumnya menjadi dasar pengoperasian Papan Interaktif Digital modern?", options: ["Windows", "Android", "Linux", "macOS"], answer: 1, rationale: "Android dipilih karena fleksibel, mendukung banyak aplikasi edukasi, dan sangat optimal untuk navigasi layar sentuh." },
-            { question: "Komponen perangkat keras manakah yang digunakan untuk menulis secara presisi pada layar?", options: ["Speaker", "Kamera", "Pena Digital (Stylus)", "Port HDMI"], answer: 2, rationale: "Pena digital dirancang khusus untuk presisi saat menulis dan menggambar." },
-            { question: "Fitur apa yang memungkinkan banyak murid berinteraksi di layar secara bersamaan?", options: ["Single Touch", "Kolaborasi Multi-user", "Screenshare", "Video Konferensi"], answer: 1, rationale: "Fitur Multi-user memungkinkan beberapa titik sentuh dideteksi sekaligus." },
-            { question: "Port mana yang digunakan untuk menghubungkan laptop agar mengirim sinyal video dan audio digital?", options: ["USB 2.0", "HDMI", "Bluetooth", "VGA Tanpa Audio"], answer: 1, rationale: "HDMI adalah standar utama untuk transfer video dan audio berkualitas tinggi." },
-            { question: "Apa manfaat utama visualisasi konsep dalam pembelajaran menggunakan papan interaktif?", options: ["Mengurangi listrik", "Mempermudah pemahaman materi kompleks", "Mempercepat jam istirahat", "Menggantikan peran guru"], answer: 1, rationale: "Simulasi visual membantu siswa memahami konsep abstrak." },
-            { question: "Bagaimana cara terbaik menyimpan hasil diskusi di papan tulis digital?", options: ["Fitur Manajemen File (Save)", "Memotret dengan HP", "Menghapus layar", "Mematikan listrik paksa"], answer: 0, rationale: "Fitur 'Save' internal memungkinkan penyimpanan digital yang rapi." },
-            { question: "Mengapa penjadwalan pemakaian papan interaktif sangat penting?", options: ["Agar terlihat sibuk", "Agar tagihan internet turun", "Menghindari penggunaan berlebihan (overused)", "Membatasi akses murid"], answer: 2, rationale: "Penjadwalan menjaga umur pakai perangkat keras." },
-            { question: "Kain jenis apa yang paling aman untuk membersihkan layar tanpa goresan?", options: ["Kertas Tisu", "Kain Microfiber", "Kain Katun Kasar", "Spons Dapur"], answer: 1, rationale: "Kain Microfiber mengangkat debu tanpa merusak lapisan pelindung." },
-            { question: "Apa fungsi dari fitur pengunci keamanan (Security Lock)?", options: ["Mencegah layar pecah", "Mempercepat WiFi", "Mengelola akses dan mencegah perubahan setelan", "Menghapus virus"], answer: 2, rationale: "Mencegah perubahan settingan sistem oleh orang yang tidak berwenang." },
-            { question: "Tindakan mana yang mencerminkan perawatan fisik port HDMI/USB yang benar?", options: ["Mencolok kabel dengan paksa", "Memasukkan kabel secara perlahan dan benar", "Membersihkan dengan logam tajam", "Membiarkan kabel menggantung berat"], answer: 1, rationale: "Pemasangan kabel yang hati-hati menjaga pin konektor tetap utuh." }
+            { 
+                question: "Apa definisi utama dari Interactive Flat Panel (IFP)?", 
+                options: [
+                    "Layar sentuh interaktif pengganti proyektor dan papan tulis tradisional", 
+                    "Layar monitor berukuran besar untuk presentasi statis", 
+                    "Sistem proyeksi nirkabel berbasis sistem operasi Android", 
+                    "Perangkat audio-visual terpadu untuk menonton video edukasi"
+                ], 
+                answer: 0, 
+                rationale: "IFP adalah perangkat all-in-one yang menggantikan fungsi proyektor dan papan tulis tradisional dengan integrasi layar, speaker, dan sistem operasi." 
+            },
+            { 
+                question: "Apa manfaat utama yang didapatkan siswa melalui portofolio digital di Ruang Murid?", 
+                options: [
+                    "Menyimpan catatan nilai ujian harian saja", 
+                    "Mendokumentasikan seluruh riwayat aktivitas belajar secara digital", 
+                    "Mengelola data administrasi dan profil kesiswaan", 
+                    "Menyediakan akses ke berbagai aplikasi hiburan edukatif"
+                ], 
+                answer: 1, 
+                rationale: "Ruang Murid menyediakan portofolio digital yang merekam semua aktivitas belajar siswa untuk memantau perkembangan mereka." 
+            },
+            { 
+                question: "Manakah fitur IFP yang memungkinkan guru membagikan hasil diskusi kelas untuk dipelajari di rumah?", 
+                options: [
+                    "Fitur proyeksi layar nirkabel ke perangkat siswa", 
+                    "Sistem manajemen dokumen berbasis penyimpanan cloud", 
+                    "Penyimpanan catatan digital secara otomatis", 
+                    "Fitur sinkronisasi akun pengguna secara real-time"
+                ], 
+                answer: 2, 
+                rationale: "Seluruh sesi pembelajaran dapat disimpan secara digital dan dibagikan kepada siswa untuk referensi belajar di rumah." 
+            },
+            { 
+                question: "Dalam mata pelajaran Matematika, bagaimana IFP membantu visualisasi konsep pecahan?", 
+                options: [
+                    "Menampilkan diagram batang dan tabel data yang statis", 
+                    "Menggunakan alat hitung digital yang terintegrasi pada layar", 
+                    "Visualisasi angka dan rumus matematika yang kompleks", 
+                    "Melalui animasi pembagian pizza atau kue yang dapat disentuh"
+                ], 
+                answer: 3, 
+                rationale: "IFP memungkinkan visualisasi konsep abstrak seperti pecahan melalui animasi interaktif yang menarik." 
+            },
+            { 
+                question: "Apa keuntungan utama integrasi IFP dengan platform 'Ruang Murid' bagi guru?", 
+                options: [
+                    "Sinkronisasi data nilai siswa secara otomatis ke server", 
+                    "Akses materi tanpa perlu login berulang kali", 
+                    "Update konten pembelajaran secara instan setiap hari", 
+                    "Pengaturan profil pengguna yang lebih fleksibel"
+                ], 
+                answer: 1, 
+                rationale: "Integrasi ini memungkinkan guru membuka platform langsung dari layar IFP dengan satu klik, menghemat waktu persiapan kelas." 
+            },
+            { 
+                question: "Metode pembelajaran apa yang memungkinkan siswa belajar materi di rumah lalu berdiskusi interaktif di kelas menggunakan IFP?", 
+                options: [
+                    "Blended Learning", 
+                    "Hybrid Learning", 
+                    "Flipped Classroom", 
+                    "Project Based Learning"
+                ], 
+                answer: 2, 
+                rationale: "Flipped classroom adalah inovasi di mana siswa belajar di rumah via Ruang Murid dan melakukan praktik interaktif di IFP saat di kelas." 
+            },
+            { 
+                question: "Mengapa IFP dianggap lebih unggul dibandingkan proyektor tradisional dalam hal visual?", 
+                options: [
+                    "Dapat digunakan dalam kondisi pencahayaan normal dengan kualitas optimal", 
+                    "Memiliki ketajaman resolusi yang sangat tinggi (4K)", 
+                    "Dilengkapi dengan teknologi pelindung mata (blue light filter)", 
+                    "Menggunakan sistem pencahayaan LED yang hemat energi"
+                ], 
+                answer: 0, 
+                rationale: "Berbeda dengan proyektor, IFP memberikan gambar tajam dan cerah bahkan dalam kondisi pencahayaan kelas normal." 
+            },
+            { 
+                question: "Bagaimana integrasi Ruang Murid dan IFP membantu penyajian materi pembelajaran?", 
+                options: [
+                    "Sinkronisasi otomatis antara akun guru dan siswa", 
+                    "Penyimpanan materi langsung ke memori internal perangkat IFP", 
+                    "Fitur diskusi daring antar siswa melalui layar panel", 
+                    "Materi dari Ruang Murid bisa tampil di IFP tanpa perlu membuka banyak aplikasi"
+                ], 
+                answer: 3, 
+                rationale: "Integrasi ini memungkinkan semua materi, video, dan dokumen tersedia dalam satu ekosistem platform yang terintegrasi." 
+            },
+            { 
+                question: "Apa salah satu langkah nyata Kemendikdasmen dalam mendukung optimalisasi penggunaan IFP oleh guru?", 
+                options: [
+                    "Mewajibkan guru membuat seluruh modul ajar secara mandiri", 
+                    "Membatasi penggunaan platform digital hanya untuk sekolah tertentu", 
+                    "Menyediakan bank soal, video edukasi, dan modul yang telah dikurasi pakar", 
+                    "Mengharuskan sekolah membeli lisensi aplikasi tambahan"
+                ], 
+                answer: 2, 
+                rationale: "Kemendikdasmen menyediakan Sumber Daya Terbuka berupa konten digital gratis yang dikurasi pakar agar guru tidak perlu membuat materi dari nol." 
+            },
+            { 
+                question: "Apa manfaat fitur simulasi pada mata pelajaran IPAS menggunakan IFP?", 
+                options: [
+                    "Mempermudah guru dalam memberikan tugas harian", 
+                    "Menunjukkan proses yang sulit dijelaskan kata-kata", 
+                    "Menggantikan peran alat peraga fisik di dalam kelas", 
+                    "Meningkatkan fokus siswa melalui video berdurasi panjang"
+                ], 
+                answer: 1, 
+                rationale: "Simulasi interaktif membantu menjelaskan proses kompleks seperti fotosintesis atau sistem organ dengan model 3D." 
+            }
         ];
 
         const App = () => {
@@ -106,41 +205,35 @@
             const [showResult, setShowResult] = useState(false);
             const [selectedOption, setSelectedOption] = useState(null);
             const [isAnswered, setIsAnswered] = useState(false);
-            const [timeLeft, setTimeLeft] = useState(20);
+            const [timeLeft, setTimeLeft] = useState(30);
             const [globalLeaderboard, setGlobalLeaderboard] = useState([]);
 
-            // Rule 3: Auth First
             useEffect(() => {
                 const initAuth = async () => {
                     if (!window.fbCore || !config) return;
                     try {
                         const appInstance = window.fbCore.initializeApp(config);
                         const authInstance = window.fbAuth.getAuth(appInstance);
-                        
                         if (authToken) {
                             await window.fbAuth.signInWithCustomToken(authInstance, authToken);
                         } else {
                             await window.fbAuth.signInAnonymously(authInstance);
                         }
-                        
                         window.fbAuth.onAuthStateChanged(authInstance, setUser);
                     } catch (e) { console.error("Auth init failed:", e); }
                 };
                 initAuth();
             }, []);
 
-            // Rule 1 & 2: Firestore Listen & Local Sort
             useEffect(() => {
                 if (!user) return;
                 const dbInstance = window.fbDb.getFirestore();
                 const lbCol = window.fbDb.collection(dbInstance, 'artifacts', appId, 'public', 'data', 'leaderboard');
-                
                 const unsubscribe = window.fbDb.onSnapshot(lbCol, (snapshot) => {
                     const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                     const sorted = data.sort((a, b) => b.score - a.score || (a.timestamp?.seconds || 0) - (b.timestamp?.seconds || 0));
                     setGlobalLeaderboard(sorted);
                 }, (error) => console.error("Firestore error:", error));
-
                 return () => unsubscribe();
             }, [user]);
 
@@ -184,7 +277,7 @@
                     setCurrentQuestion(currentQuestion + 1);
                     setSelectedOption(null);
                     setIsAnswered(false);
-                    setTimeLeft(20);
+                    setTimeLeft(30);
                 } else {
                     await saveResult();
                     setShowResult(true);
@@ -193,8 +286,8 @@
 
             const AppFooter = () => (
                 <div className="mt-12 py-6 text-center border-t border-slate-200/50">
-                    <p className="text-black text-[10px] sm:text-[11px] md:text-[12px] font-semibold tracking-wide whitespace-nowrap overflow-hidden">
-                        Kuis Edukatif ini dibuat oleh Tumin Hadiwijoyo
+                    <p className="text-black text-[10px] sm:text-[11px] md:text-[12px] font-semibold tracking-wide">
+                        Kuis Edukatif ini dibuat oleh Tumin Hadiwijoyo © 2026
                     </p>
                 </div>
             );
@@ -212,8 +305,8 @@
                             </div>
                             <div className="space-y-3">
                                 <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">Sinau Bareng</h1>
-                                <p className="text-blue-600 font-semibold italic text-sm sm:text-base whitespace-nowrap">
-                                    Uji wawasan tentang Papan Interaktif Digital
+                                <p className="text-blue-600 font-semibold italic text-sm sm:text-base">
+                                    Pemanfaatan IFP & Ruang Murid
                                 </p>
                             </div>
                             <form onSubmit={handleStart} className="space-y-6 text-left">
@@ -232,7 +325,7 @@
                                     </div>
                                 </div>
                                 <button type="submit" className="w-full bg-blue-600 text-white py-5 rounded-2xl font-extrabold text-lg shadow-xl hover:bg-blue-700 transition-all flex items-center justify-center gap-2">
-                                    Mulai Sesi Kuis <Icon name="arrow-right" size={22} />
+                                    Mulai Kuis <Icon name="arrow-right" size={22} />
                                 </button>
                             </form>
                             <AppFooter />
@@ -248,11 +341,11 @@
                             <div className="flex flex-col lg:flex-row gap-10">
                                 <div className="lg:w-1/2 text-center space-y-8">
                                     <Icon name="trophy" size={120} className="mx-auto text-yellow-400" />
-                                    <h2 className="text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">Luar Biasa, {userName}!</h2>
+                                    <h2 className="text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">Hebat, {userName}!</h2>
                                     <div className="flex gap-4 justify-center">
                                         <div className="bg-blue-600 p-6 rounded-[2.5rem] text-white shadow-xl flex-1">
                                             <span className="block text-4xl font-extrabold">{score}/{questions.length}</span>
-                                            <span className="text-[10px] uppercase font-extrabold opacity-70 tracking-widest">Skor</span>
+                                            <span className="text-[10px] uppercase font-extrabold opacity-70 tracking-widest">Benar</span>
                                         </div>
                                         <div className="bg-white border-2 border-slate-100 p-6 rounded-[2.5rem] flex-1">
                                             <span className="block text-4xl font-extrabold text-blue-600">{Math.round((score / questions.length) * 100)}%</span>
@@ -264,7 +357,7 @@
                                 <div className="lg:w-1/2 bg-slate-900 text-white p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden flex flex-col h-[500px]">
                                     <div className="flex items-center justify-between mb-6">
                                         <h3 className="text-xl font-extrabold flex items-center gap-2">
-                                            <Icon name="users" className="text-blue-400" /> Peringkat Global
+                                            <Icon name="users" className="text-blue-400" /> Peringkat Peserta
                                         </h3>
                                         <span className="bg-blue-600 text-[10px] px-3 py-1 rounded-full font-black uppercase">LIVE</span>
                                     </div>
@@ -276,13 +369,11 @@
                                                         {idx + 1}
                                                     </div>
                                                     <span className="font-bold truncate max-w-[150px]">{entry.name}</span>
-                                                    {entry.userId === user?.uid && <span className="text-[9px] bg-white text-blue-900 px-2 py-0.5 rounded font-black uppercase">Anda</span>}
                                                 </div>
                                                 <span className="font-black text-blue-400 text-xl">{entry.score}</span>
                                             </div>
                                         ))}
                                     </div>
-                                    <p className="text-[10px] text-slate-500 mt-4 text-center uppercase tracking-widest font-black italic">Daftar seluruh peserta kuis online</p>
                                 </div>
                             </div>
                             <AppFooter />
@@ -307,12 +398,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <div className={`flex items-center gap-3 px-6 py-3 rounded-2xl font-mono font-extrabold text-xl ${timeLeft < 6 ? 'bg-red-500 text-white animate-pulse' : 'bg-slate-900 text-white'}`}>
+                            <div className={`flex items-center gap-3 px-6 py-3 rounded-2xl font-mono font-extrabold text-xl ${timeLeft < 10 ? 'bg-red-500 text-white animate-pulse' : 'bg-slate-900 text-white'}`}>
                                 <Icon name="timer" size={22} /> {timeLeft}s
                             </div>
                         </div>
                         <div className="bg-white p-8 md:p-16 rounded-[3.5rem] shadow-xl border border-slate-100 space-y-12 min-h-[500px] flex flex-col justify-center relative animate-in">
-                            <h3 className="text-2xl md:text-4xl font-extrabold text-slate-900 leading-[1.3] tracking-tight text-center md:text-left">{q?.question}</h3>
+                            <h3 className="text-2xl md:text-3xl font-extrabold text-slate-900 leading-[1.3] tracking-tight text-center md:text-left">{q?.question}</h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {q?.options.map((option, idx) => (
                                     <button
@@ -337,8 +428,8 @@
                                     <div className={`animate-in p-8 rounded-[2.5rem] flex gap-6 ${selectedOption === q.answer ? 'bg-blue-600 text-white' : 'bg-slate-900 text-white'}`}>
                                         <div className="bg-white/20 p-4 rounded-2xl h-fit"><Icon name={selectedOption === q.answer ? "lightbulb" : "help-circle"} size={32} /></div>
                                         <div>
-                                            <p className="font-extrabold text-xl mb-2">{selectedOption === q.answer ? 'Insight Edukatif' : 'Coba Lagi Nanti'}</p>
-                                            <p className="opacity-90 leading-relaxed font-semibold text-lg">{selectedOption === q.answer ? q.rationale : 'Tetap semangat! Periksa kembali jawabanmu untuk belajar dari kesalahan.'}</p>
+                                            <p className="font-extrabold text-xl mb-2">{selectedOption === q.answer ? 'Wawasan Edukatif' : 'Coba Lagi'}</p>
+                                            <p className="opacity-90 leading-relaxed font-semibold text-lg">{selectedOption === q.answer ? q.rationale : `Jawaban yang benar adalah ${String.fromCharCode(65 + q.answer)}. ${q.rationale}`}</p>
                                         </div>
                                     </div>
                                 )}
